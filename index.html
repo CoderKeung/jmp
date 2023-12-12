@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>上传数据</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <div class="titleArea">
+      <h1>美篇及简篇文章转WORD文档</h1>
+    </div>
+    <form class="appArea" onsubmit="event.preventDefault(); main()">
+      <input type="text" id="inputUrl" placeholder=" 请输入美篇或简篇的链接">
+      <button type="submit">转换文章</button>
+    </form>
+    <img src="./loader.gif" alt="加载中……" class="loader" id="loader">
+    <div id="articleArea"></div>
+  </main>
+</body>
+<script src="./static/FileSaver.min.js"></script>
+<script src="./static/sweetalert.min.js"></script>
+<script src="script.js"></script>
+</html>
