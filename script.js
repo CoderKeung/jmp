@@ -1,5 +1,5 @@
-const DEAL_URL = "http://127.0.0.1:8001/deal";
-const DOWNLOAD_URL = "http://127.0.0.1:8001/download";
+const DEAL_URL = "https://api.zsm.wiki/deal";
+const DOWNLOAD_URL = "https://api.zsm.wiki/download";
 const DOMAINLIST = [
   "www.jianpian.cn",
   "www.meipian.cn",
@@ -8,24 +8,29 @@ const DOMAINLIST = [
 const ID_ARRAY = [];
 
 function main() {
-  var inputUrl = document.getElementById('inputUrl').value;
+  let inputUrl = document.getElementById('inputUrl').value;
   if (isValidURL(inputUrl) && noCovered(inputUrl)) {
     dealArticle(inputUrl);
   }
 }
 
-function noCovered(url){
+function getArticleIdFromUrl(url) {
   const newUrl = new URL(url);
-  var pathname = newUrl.pathname;
-  var hostname = newUrl.hostname;
-  var parts = pathname.split("/");
-  var articleId;
-  if (hostname == DOMAINLIST[0] || hostname == DOMAINLIST[2]) {
-    articleId = parts[2]; 
+  let pathname = newUrl.pathname;
+  let hostname = newUrl.hostname;
+  let parts = pathname.split("/");
+  let articleId;
+  if (hostname === DOMAINLIST[0] || hostname === DOMAINLIST[2]) {
+    articleId = parts[2];
   }
-  if (hostname == DOMAINLIST[1]) {
+  if (hostname === DOMAINLIST[1]) {
     articleId = parts[1];
   }
+  return articleId;
+}
+
+function noCovered(url){
+  let articleId = getArticleIdFromUrl(url);
   if (ID_ARRAY.includes(articleId)) {
     swal({
       title: "转换过了！",
@@ -39,7 +44,8 @@ function noCovered(url){
 
 function dealArticle(inputUrl) {
   showLoader();
-  var url = DEAL_URL + '?url=' + encodeURIComponent(inputUrl);
+  let url = DEAL_URL + '?url=' + encodeURIComponent(inputUrl)
+          + "&id=" + getArticleIdFromUrl(inputUrl);
   // 发送 GET 请求
   fetch(url)
     .then(response => response.json())
@@ -65,9 +71,9 @@ function dealArticle(inputUrl) {
     });
 }
 function createArticleList(articleData) {
-  var articleArea = document.getElementById('articleArea');
-  var newArticleList = document.createElement('li');
-  var span = document.createElement('span');
+  let articleArea = document.getElementById('articleArea');
+  let newArticleList = document.createElement('li');
+  let span = document.createElement('span');
   newArticleList.textContent = "💡 ";
   span.textContent = articleData.title;
   newArticleList.classList.add('articleListItem');
@@ -78,11 +84,11 @@ function createArticleList(articleData) {
   articleArea.style.display = "block";
 }
 function showLoader(){
-  var loader = document.getElementById("loader");
+  let loader = document.getElementById("loader");
   loader.style.display = "block";
 }
 function hideLoader(){
-  var loader = document.getElementById("loader");
+  let loader = document.getElementById("loader");
   loader.style.display = "none";
 }
 function getArticleFile() {
